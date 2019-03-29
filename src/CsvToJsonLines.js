@@ -22,7 +22,7 @@ class CsvToJsonlines extends Transform {
       return done();
     }
     this._lineNumber += 1;
-    const jsObj = this._headers.reduce((obj, field, idx) => {
+    const jsObj = this._headers.reduce((obj, header, idx) => {
       const value = convertToNumberIfNeeded(
         lineData[idx]
         && lineData[idx]
@@ -31,9 +31,9 @@ class CsvToJsonlines extends Transform {
           .replace(new RegExp(/"/, 'g'), ''),
       );
 
-      const nested = field.includes('.');
+      const nested = header.includes('.');
       if (nested) {
-        const properties = field.split('.');
+        const properties = header.split('.');
         let pointer = obj;
         properties.forEach((prop, i) => {
           // if this is the last property, store the value at that property
@@ -45,7 +45,7 @@ class CsvToJsonlines extends Transform {
           }
         });
       } else {
-        Object.assign(obj, { [field]: value });
+        Object.assign(obj, { [header]: value });
       }
       return obj;
     }, {});
