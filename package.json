@@ -1,5 +1,5 @@
 {
-  "name": "csv-to-jsonl",
+  "name": "csv-2-jsonl",
   "version": "0.1.0",
   "description": "small csv to json-lines parser with no dependencies",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/erikwlarsen/csv-to-jsonl.git"
   },
-  "author": "",
+  "author": "erik.w.larsen",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/erikwlarsen/csv-to-jsonl/issues"
