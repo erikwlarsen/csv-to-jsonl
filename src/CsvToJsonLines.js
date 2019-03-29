@@ -3,9 +3,7 @@ const {
   COMMA_REPLACEMENT_VALUE_IN_QUOTES,
   NEWLINE_REPLACEMENT_VALUE_IN_QUOTES,
 } = require('./constants');
-const { convertToNumberIfNeeded } = require('./utils');
-
-// Add some flags: convertBooleans, convertToNull
+const { convertToNumber, convertToBooleanOrNull } = require('./utils');
 
 class CsvToJsonlines extends Transform {
   constructor() {
@@ -23,13 +21,13 @@ class CsvToJsonlines extends Transform {
     }
     this._lineNumber += 1;
     const jsObj = this._headers.reduce((obj, header, idx) => {
-      const value = convertToNumberIfNeeded(
+      const value = convertToBooleanOrNull(convertToNumber(
         lineData[idx]
         && lineData[idx]
           .replace(new RegExp(COMMA_REPLACEMENT_VALUE_IN_QUOTES, 'g'), ',')
           .replace(new RegExp(NEWLINE_REPLACEMENT_VALUE_IN_QUOTES, 'g'), '\n')
           .replace(new RegExp(/"/, 'g'), ''),
-      );
+      ));
 
       const nested = header.includes('.');
       if (nested) {
