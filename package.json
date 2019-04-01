@@ -1,5 +1,8 @@
 {
   "name": "csv-2-jsonl",
+  "bin": {
+    "csv2jsonl": "./bin/index.js"
+  },
   "version": "0.1.0",
   "description": "small csv to json-lines parser with no dependencies",
   "main": "index.js",

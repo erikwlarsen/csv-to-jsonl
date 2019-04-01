@@ -10,6 +10,8 @@ const boolNullMap = {
   Null: null,
 };
 
+const duckTypeStream = stream => typeof stream.on === 'function';
+
 module.exports = {
   convertToNumber(value) {
     return (
@@ -19,5 +21,11 @@ module.exports = {
   },
   convertToBooleanOrNull(value) {
     return value in boolNullMap ? boolNullMap[value] : value;
+  },
+  duckTypeReadable(readable) {
+    return duckTypeStream(readable) && typeof readable.read === 'function' && typeof readable.pipe === 'function';
+  },
+  duckTypeWritable(writable) {
+    return duckTypeStream(writable) && typeof writable.write === 'function';
   },
 };
