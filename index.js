@@ -3,7 +3,7 @@ const { LineSplitter } = require('./src/LineSplitter');
 const { CsvToJsonlines } = require('./src/CsvToJsonLines');
 const { duckTypeReadable, duckTypeWritable, promiseWrap } = require('./src/utils');
 
-module.exports = ({ inputStream, outputStream, awaitable } = {}) => {
+module.exports = ({ inputStream, outputStream, returnPromise } = {}) => {
   if (!inputStream) {
     throw new Error('inputStream argument is required');
   }
@@ -26,5 +26,5 @@ module.exports = ({ inputStream, outputStream, awaitable } = {}) => {
     .pipe(new LineSplitter())
     .pipe(new CsvToJsonlines())
     .pipe(outputStream);
-  return awaitable ? promiseWrap(outputStream) : csvToJsonlines;
+  return returnPromise ? promiseWrap(outputStream) : csvToJsonlines;
 };
