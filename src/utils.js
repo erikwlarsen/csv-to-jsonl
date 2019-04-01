@@ -28,4 +28,11 @@ module.exports = {
   duckTypeWritable(writable) {
     return duckTypeStream(writable) && typeof writable.write === 'function';
   },
+  promiseWrap(outputStream) {
+    return new Promise((resolve) => {
+      outputStream.on('finish', () => {
+        resolve();
+      });
+    });
+  },
 };
