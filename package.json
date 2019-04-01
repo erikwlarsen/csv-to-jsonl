@@ -3,7 +3,7 @@
   "bin": {
     "csv2jsonl": "./bin/index.js"
   },
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "small csv to json-lines parser with no dependencies",
   "main": "index.js",
   "scripts": {
