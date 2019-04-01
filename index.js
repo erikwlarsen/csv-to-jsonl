@@ -7,6 +7,14 @@ module.exports = (inputStream, outputStream) => {
   if (!duckTypeReadable(inputStream)) {
     throw new Error('Input is not readable stream or is missing required readable stream methods');
   }
+  const csvToJsonlines = new CsvToJsonlines();
+  if (!outputStream) {
+    inputStream
+      .pipe(new RemoveNewLinesAndCommas())
+      .pipe(new LineSplitter())
+      .pipe(csvToJsonlines);
+    return csvToJsonlines;
+  }
   if (!duckTypeWritable(outputStream)) {
     throw new Error('Output is not readable stream or is missing required readable stream methods');
   }
@@ -15,4 +23,5 @@ module.exports = (inputStream, outputStream) => {
     .pipe(new LineSplitter())
     .pipe(new CsvToJsonlines())
     .pipe(outputStream);
+  return csvToJsonlines;
 };
