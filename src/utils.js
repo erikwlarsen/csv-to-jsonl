@@ -31,9 +31,12 @@ module.exports = {
     return duckTypeStream(writable) && typeof writable.write === 'function';
   },
   promiseWrap(outputStream) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       outputStream.on('finish', () => {
         resolve();
+      });
+      outputStream.on('error', (error) => {
+        reject(error);
       });
     });
   },

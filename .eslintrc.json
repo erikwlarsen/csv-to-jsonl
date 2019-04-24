@@ -5,6 +5,13 @@
     "no-use-before-define": ["error", { "functions": true, "classes": false, "variables": false }],
     "no-nested-ternary": 0,
     "no-console": ["error", { "allow": ["error"] }],
-    "valid-typeof": [ "error", { "requireStringLiterals": false }]
+    "valid-typeof": [ "error", { "requireStringLiterals": false }],
+    "mocha/no-exclusive-tests": "error"
+  },
+  "plugins": [
+    "mocha"
+  ],
+  "env": {
+    "mocha": true
   }
 }
