@@ -12,6 +12,8 @@ const boolNullMap = {
 
 const duckTypeStream = stream => typeof stream.on === 'function';
 
+const isLastIndex = (arr, idx) => idx === arr.length - 1;
+
 module.exports = {
   convertToNumber(value) {
     return (
@@ -33,6 +35,28 @@ module.exports = {
       outputStream.on('finish', () => {
         resolve();
       });
+    });
+  },
+  getObjectValue(prop, obj) {
+    const objPath = prop.split('.');
+    return objPath.reduce((pointer, key) => (pointer ? pointer[key] : null), obj);
+  },
+  isUndefinedOrNull(value) {
+    return typeof value === 'undefined' || value === null;
+  },
+  assignPropertyToObject(obj, prop, value) {
+    const objPath = prop.split('.');
+    let pointer = obj;
+    objPath.forEach((key, idx) => {
+      if (isLastIndex(objPath, idx)) {
+        pointer[key] = value;
+      } else {
+        if (Object.hasOwnProperty.call(pointer, key) && typeof pointer[key] !== 'object') {
+          throw new Error('Error parsing header property paths. You may be trying to nest properties on a non-object value');
+        }
+        pointer[key] = pointer[key] || {};
+        pointer = pointer[key];
+      }
     });
   },
 };
