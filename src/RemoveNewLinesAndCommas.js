@@ -6,20 +6,28 @@ const {
   NEWLINE_REPLACEMENT_VALUE_IN_QUOTES,
   REPLACEMENT_VALUE_LENGTH,
 } = require('./constants');
+const { isLastIndex } = require('./utils');
 
 const augmentQuoteIndicesMapper = (matchOffset, matchLength) => index => (
-  index < matchOffset ? index : index + (REPLACEMENT_VALUE_LENGTH * matchLength)
+  index <= matchOffset ? index : index + (REPLACEMENT_VALUE_LENGTH * matchLength)
 );
 
-const inQuotesReducer = matchOffset => (acc, val, idx) => {
+const inQuotesReducer = (matchOffset, inQuotes) => (acc, val, idx, arr) => {
   if (typeof acc !== 'undefined') {
     return acc;
   }
   if (matchOffset < val) {
-    return idx % 2 ? !this._inQuotes : this._inQuotes;
+    return idx % 2 ? !inQuotes : inQuotes;
+  }
+  if (isLastIndex(arr, idx)) {
+    return arr.length % 2 ? !inQuotes : inQuotes;
   }
   return undefined;
 };
+
+const putUnquotedCommasAndNewlinesBack = str => str
+  .replace(new RegExp(COMMA_REPLACEMENT_VALUE, 'g'), ',')
+  .replace(new RegExp(NEWLINE_REPLACEMENT_VALUE, 'g'), '\n');
 
 class RemoveNewLinesAndCommas extends Transform {
   constructor() {
@@ -40,9 +48,8 @@ class RemoveNewLinesAndCommas extends Transform {
       oldString = string;
       string = string.replace(/\n|\r\n|\r|,/, this._replaceCommasAndNewlines);
     }
-    this.push(string
-      .replace(new RegExp(COMMA_REPLACEMENT_VALUE, 'g'), ',')
-      .replace(new RegExp(NEWLINE_REPLACEMENT_VALUE, 'g'), '\n'));
+    string = putUnquotedCommasAndNewlinesBack(string);
+    this.push(string);
     if (this._quoteIndices.length % 2) {
       this._inQuotes = !this._inQuotes;
     }
@@ -50,7 +57,7 @@ class RemoveNewLinesAndCommas extends Transform {
   }
 
   _replaceCommasAndNewlines(match, offset) {
-    const inQuotes = this._quoteIndices.reduce(inQuotesReducer(offset), undefined);
+    const inQuotes = this._quoteIndices.reduce(inQuotesReducer(offset, this._inQuotes), undefined);
     this._quoteIndices = this._quoteIndices.map(augmentQuoteIndicesMapper(offset, match.length));
     if (inQuotes) {
       return match === ','
@@ -63,4 +70,9 @@ class RemoveNewLinesAndCommas extends Transform {
   }
 }
 
-module.exports = { RemoveNewLinesAndCommas };
+module.exports = {
+  RemoveNewLinesAndCommas,
+  augmentQuoteIndicesMapper,
+  inQuotesReducer,
+  putUnquotedCommasAndNewlinesBack,
+};
