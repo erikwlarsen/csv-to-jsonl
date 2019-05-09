@@ -2,7 +2,7 @@
 
 const { createReadStream, createWriteStream, existsSync } = require('fs');
 const { resolve } = require('path');
-
+const { RemoveExtraQuotes } = require('../src/RemoveExtraQuotes');
 const { RemoveNewLinesAndCommas } = require('../src/RemoveNewLinesAndCommas');
 const { LineSplitter } = require('../src/LineSplitter');
 const { CsvToJsonlines } = require('../src/CsvToJsonLines');
@@ -22,6 +22,7 @@ const absOutputPath = outputPath
   : absInputPath.slice(0, absInputPath.length - 3).concat('jsonl');
 
 createReadStream(absInputPath)
+  .pipe(new RemoveExtraQuotes())
   .pipe(new RemoveNewLinesAndCommas())
   .pipe(new LineSplitter())
   .pipe(new CsvToJsonlines())
