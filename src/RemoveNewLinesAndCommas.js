@@ -9,7 +9,7 @@ const {
 const { isLastIndex } = require('./utils');
 
 const augmentQuoteIndicesMapper = (matchOffset, matchLength) => index => (
-  index <= matchOffset ? index : index + (REPLACEMENT_VALUE_LENGTH * matchLength)
+  index <= matchOffset ? index : index + ((REPLACEMENT_VALUE_LENGTH - 1) * matchLength)
 );
 
 const inQuotesReducer = (matchOffset, inQuotes) => (acc, val, idx, arr) => {
@@ -46,7 +46,7 @@ class RemoveNewLinesAndCommas extends Transform {
     let oldString = '';
     while (oldString !== string) {
       oldString = string;
-      string = string.replace(/\n|\r\n|\r|,/, this._replaceCommasAndNewlines);
+      string = string.replace(/\n|\r\n|\r|,/, this._replaceCommasAndNewlines.bind(this));
     }
     string = putUnquotedCommasAndNewlinesBack(string);
     this.push(string);

@@ -7,7 +7,8 @@
   "description": "small csv to json-lines parser with no dependencies",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --all mocha --exit --recursive"
+    "test": "nyc --all mocha --exit --recursive",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
