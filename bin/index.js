@@ -5,7 +5,7 @@ const { resolve } = require('path');
 const { RemoveExtraQuotes } = require('../src/RemoveExtraQuotes');
 const { RemoveNewLinesAndCommas } = require('../src/RemoveNewLinesAndCommas');
 const { LineSplitter } = require('../src/LineSplitter');
-const { CsvToJsonlines } = require('../src/CsvToJsonLines');
+const { CsvToJsonlines } = require('../src/CsvToJsonlines');
 
 const [,, inputPath, outputPath] = process.argv;
 if (!inputPath) {

@@ -85,7 +85,7 @@ csvToJsonl({
 });
 ```
 
-You can also pass in your own validation function with the `validateFunc` property. This function is called after parsing and will be passed each line in JavaScript object form. (This object will be nested if your CSV headers include any nested fields.) It has access to the `CsvToJsonLines.prototype.createValidationError` method, which can be used to record errors that will be logged with the rest of the validation error output at the end of the stream. This method accepts `errorType` and `field` parameters.
+You can also pass in your own validation function with the `validateFunc` property. This function is called after parsing and will be passed each line in JavaScript object form. (This object will be nested if your CSV headers include any nested fields.) It has access to the `CsvToJsonlines.prototype.createValidationError` method, which can be used to record errors that will be logged with the rest of the validation error output at the end of the stream. This method accepts `errorType` and `field` parameters.
 ```javascript
 csvToJsonl({
   inputStream: readable,

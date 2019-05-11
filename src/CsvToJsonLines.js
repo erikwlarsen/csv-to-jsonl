@@ -141,4 +141,4 @@ class CsvToJsonlines extends Transform {
   }
 }
 
-module.exports = { CsvToJsonlines };
+module.exports = { CsvToJsonlines, removeReplacementValues };
