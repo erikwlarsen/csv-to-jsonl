@@ -2,6 +2,7 @@ const { Transform } = require('stream');
 const {
   COMMA_REPLACEMENT_VALUE_IN_QUOTES,
   NEWLINE_REPLACEMENT_VALUE_IN_QUOTES,
+  QUOTE_REPLACEMENT_VALUE,
   ERROR_TYPES,
 } = require('./constants');
 const {
@@ -11,6 +12,13 @@ const {
   isUndefinedOrNull,
   assignPropertyToObject,
 } = require('./utils');
+
+const removeReplacementValues = str => str
+  .replace(new RegExp(COMMA_REPLACEMENT_VALUE_IN_QUOTES, 'g'), ',')
+  .replace(new RegExp(NEWLINE_REPLACEMENT_VALUE_IN_QUOTES, 'g'), '\n')
+  .replace(new RegExp(/"/, 'g'), '')
+  .replace(new RegExp(QUOTE_REPLACEMENT_VALUE, 'g'), '"');
+
 
 class CsvToJsonlines extends Transform {
   constructor({ validation, validateFunc, doNotThrow } = {}) {
@@ -34,11 +42,7 @@ class CsvToJsonlines extends Transform {
     this._lineNumber += 1;
     const jsObj = this._headers.reduce((obj, header, idx) => {
       const value = convertToBooleanOrNull(convertToNumber(
-        lineData[idx]
-        && lineData[idx]
-          .replace(new RegExp(COMMA_REPLACEMENT_VALUE_IN_QUOTES, 'g'), ',')
-          .replace(new RegExp(NEWLINE_REPLACEMENT_VALUE_IN_QUOTES, 'g'), '\n')
-          .replace(new RegExp(/"/, 'g'), ''),
+        lineData[idx] && removeReplacementValues(lineData[idx]),
       ));
       assignPropertyToObject(obj, header, value);
       return obj;

@@ -1,3 +1,4 @@
+const { RemoveExtraQuotes } = require('./src/RemoveExtraQuotes');
 const { RemoveNewLinesAndCommas } = require('./src/RemoveNewLinesAndCommas');
 const { LineSplitter } = require('./src/LineSplitter');
 const { CsvToJsonlines } = require('./src/CsvToJsonLines');
@@ -15,6 +16,7 @@ module.exports = ({
   const csvToJsonlines = new CsvToJsonlines({ validation, validateFunc, doNotThrow });
   if (!outputStream) {
     inputStream
+      .pipe(new RemoveExtraQuotes())
       .pipe(new RemoveNewLinesAndCommas())
       .pipe(new LineSplitter())
       .pipe(csvToJsonlines);
@@ -24,6 +26,7 @@ module.exports = ({
     throw new Error('outputStream is not a writable stream or is missing required writable stream methods');
   }
   inputStream
+    .pipe(new RemoveExtraQuotes())
     .pipe(new RemoveNewLinesAndCommas())
     .pipe(new LineSplitter())
     .pipe(new CsvToJsonlines())
