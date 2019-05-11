@@ -13,7 +13,7 @@ const {
 } = require('./utils');
 
 class CsvToJsonlines extends Transform {
-  constructor({ validation, validateFunc, doNotThrow }) {
+  constructor({ validation, validateFunc, doNotThrow } = {}) {
     super();
     this._validation = validation;
     this._userValidateRow = validateFunc;
@@ -64,7 +64,7 @@ class CsvToJsonlines extends Transform {
     this._initialized = true;
   }
 
-  _flush(_chunk, _encoding, done) {
+  _flush(done) {
     this._logValidationErrors();
     return done();
   }
